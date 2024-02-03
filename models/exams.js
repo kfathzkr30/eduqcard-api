@@ -1,12 +1,16 @@
 const mongoose = require("mongoose");
 
 const ExamSchema = new mongoose.Schema({
-  creatorUserId: {
+  creatorId: {
     type: String,
     required: true,
   },
-  examname: {
+  name: {
     type: String,
+    lowercase: true,
+  },
+  chapter: {
+    type: Number,
     lowercase: true,
   },
   passGrade: {
@@ -23,5 +27,5 @@ const ExamSchema = new mongoose.Schema({
   }
 );
 
-module.exports = mongoose.model("exam", ExamSchema);
+module.exports = mongoose.model("exams", ExamSchema);
 

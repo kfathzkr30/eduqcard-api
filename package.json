@@ -1,10 +1,11 @@
 {
-  "name": "servertest",
+  "name": "backend-media-lucky",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "node server.js",
+    "startdev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",

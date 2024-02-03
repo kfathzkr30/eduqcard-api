@@ -6,7 +6,15 @@ const UserExamsSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    examName: {
+        type: String,
+        required: true,
+    },
     userId: {
+        type: String,
+        required: true,
+    },
+    username: {
         type: String,
         required: true,
     },
@@ -16,31 +24,24 @@ const UserExamsSchema = new mongoose.Schema({
     },
     status: {
         type: String,
+        enum: ['pass', 'fail', 'waiting'],
+        default: 'waiting'
     },
-    userInfo: {
-        username: {
+    review: [{
+        question: {
             type: String,
         },
-        examname: {
+        userAnswer: {
+            type: String,
+        },
+        correctAnswer: {
             type: String,
         }
-    },
-    examReview: [{
-
-        qAnswers: {
-            type: String,
-        },
-        qCorrect: {
-            type: String,
-        },
-        qTitle: {
-            type: String,
-        }
-    }],
+    }]
 },
     {
         timestamps: true,
     }
 );
 
-module.exports = mongoose.model("UserExams", UserExamsSchema);
+module.exports = mongoose.model("userExams", UserExamsSchema);

@@ -14,7 +14,7 @@ const UserExamsSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    username: {
+    fullname: {
         type: String,
         required: true,
     },

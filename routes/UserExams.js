@@ -23,7 +23,8 @@ router.get("/:id", async (req, res) => {
 
 router.get("/exam/:id", async (req, res) => {
     try {
-        UserExams.find({ examId: req.params.id }).then(data => {
+        UserExams.find({ examId: req.params.id,  }).then(data => {
+            console.log("userexam", data)
             res.status(200).json(data)
         })
     } catch (err) {
@@ -63,7 +64,7 @@ router.post('/', (req, res) => {
         examId: req.body.examId,
         examName: req.body.examName,
         userId: req.body.userId,
-        username: req.body.username,
+        fullname: req.body.fullname,
         grade: req.body.grade,
         review: req.body.review,
         status: req.body.status || 'waiting',
@@ -71,6 +72,7 @@ router.post('/', (req, res) => {
     userExams.save().then(data => {
         res.status(200).json(data)
     }).catch(e => {
+        console.log(e)
         res.status(500).json({ message: e })
     })
 })
@@ -91,12 +93,8 @@ router.patch('/:id', (req, res) => {
     UserExams.updateOne({ _id: req.params.id }, {
         $set: {
             examId: req.body.examId,
-            examName: req.body.examName,
             userId: req.body.userId,
-            username: req.body.username,
             grade: req.body.grade,
-            review: req.body.review,
-            status: req.body.status || 'waiting',
         }
     }).then(data => {
         res.status(200).json(data)

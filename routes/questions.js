@@ -15,6 +15,7 @@ router.get('/', (req, res) => {
 router.get("/:id", async (req, res) => {
     try {
         ExamQuestions.find({ examId: req.params.id }).then(data => {
+            console.log(data)
             res.status(200).json(data)
         })
     } catch (err) {

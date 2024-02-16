@@ -5,7 +5,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const userRoute = require('./routes/users')
 const examQuestionsRoute = require('./routes/questions')
-const userExamsRoute = require('./routes/UserExams')
+const userExamsRoute = require('./routes/userExams')
 const examRoute = require('./routes/exams')
 require('dotenv').config()
 

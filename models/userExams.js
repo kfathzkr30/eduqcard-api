@@ -6,10 +6,6 @@ const UserExamsSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    examName: {
-        type: String,
-        required: true,
-    },
     userId: {
         type: String,
         required: true,

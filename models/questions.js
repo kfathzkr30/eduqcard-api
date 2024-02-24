@@ -9,6 +9,10 @@ const QuestionSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    imageUrl: {
+        type: String,
+        required: false
+    },
     type: {
         type: String,
         required: true,
@@ -24,6 +28,9 @@ const QuestionSchema = new mongoose.Schema({
             default: false
         }
     }],
+    correctKeyword: [{
+        type: String,
+    }]
 },
     {
         timestamps: true,

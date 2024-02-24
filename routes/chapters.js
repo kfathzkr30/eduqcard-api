@@ -16,31 +16,35 @@ router.get('/', (req, res) => {
 //GET Chapter
 router.get("/student/:id", async (req, res) => {
     try {
-        const chapters = await Chapter.find()
+        const oldChapters = await Chapter.find()
         const studentAnswers = await StudentAnswer.find({ studentId: req.params.id })
         
-        const chaptersWithStatus = chapters.map(chapter => {
-            let status = "locked";
+        const chapters = oldChapters.map(chapter => {
+            return {...chapter.toObject(), status: "locked", grade: 0 }
+        })
+
+        for (let i = 0; i < chapters.length; i++) {
+            const chapter = chapters[i];
 
             if (chapter.number === 1 && !studentAnswers.length) {
-                status = "unlocked";
+                chapter.status = "unlocked";
             } else if (studentAnswers.length){
                 for (let j = 0; j < studentAnswers.length; j++) {
                     const studentAns = studentAnswers[j];
                     if (chapter.number === studentAns.chapterNumber) {
-                        status = "finished";
-                        break
-                    }
+                        chapter.grade = studentAns.grade > chapter.grade ? studentAns.grade : chapter.grade
+                        if (studentAns.status === 'pass') {
+                            chapter.status = "finished";
+                            chapters[i + 1].status = "unlocked"
+                            break
+                        }
+                        chapter.status = "unlocked"
+                    } 
                 }
             }
+        }
 
-            return {
-                ...chapter.toObject(), // Gunakan toObject() untuk mengonversi dokumen Mongoose menjadi objek JavaScript biasa
-                status: status
-            };
-        });
-
-        return res.status(200).json(chaptersWithStatus)
+        return res.status(200).json(chapters)
     } catch (err) {
         console.log(err)
         res.status(500).json({ message: err });

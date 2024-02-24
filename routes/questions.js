@@ -31,7 +31,7 @@ router.post('/', (req, res) => {
         optionsWithId = req.body.options.map(option => ({
             id: uuidv4(),
             text: option.text,
-            isCorrect: option.isCorrect || false
+            isCorrect: option.isCorrect || false,
         }));
     }
  
@@ -40,6 +40,7 @@ router.post('/', (req, res) => {
         title: req.body.title,
         type: req.body.type,
         options: optionsWithId,
+        correctKeyword: req.body.correctKeyword
     })
 
     examQuestions.save().then(data => {

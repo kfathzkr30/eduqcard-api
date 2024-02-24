@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
 const QuestionSchema = new mongoose.Schema({
-    examId: {
-        type: String,
+    chapter: {
+        type: Number,
         required: true
     },
     title: {
@@ -16,7 +16,7 @@ const QuestionSchema = new mongoose.Schema({
         default: 'multiple'
     },
     options: [{
-        option: {
+        text: {
             type: String,
         },
         isCorrect: {
@@ -24,9 +24,6 @@ const QuestionSchema = new mongoose.Schema({
             default: false
         }
     }],
-    correctAnswer: {
-        type: String,
-    },
 },
     {
         timestamps: true,

@@ -1,16 +1,23 @@
 const mongoose = require("mongoose");
 
-const UserExamsSchema = new mongoose.Schema({
-    examId: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    userId: {
+const studentAnswerSchema = new mongoose.Schema({
+    chapterId: {
         type: String,
         required: true,
     },
-    fullname: {
+    chapterNumber: {
+        type: Number,
+        required: true,
+    },
+    chapterType: {
+        type: String,
+        required: true,
+    },
+    studentId: {
+        type: String,
+        required: true,
+    },
+    studentName: {
         type: String,
         required: true,
     },
@@ -23,7 +30,7 @@ const UserExamsSchema = new mongoose.Schema({
         enum: ['pass', 'fail', 'waiting'],
         default: 'waiting'
     },
-    review: [{
+    answers: [{
         question: {
             type: String,
         },
@@ -40,4 +47,4 @@ const UserExamsSchema = new mongoose.Schema({
     }
 );
 
-module.exports = mongoose.model("userExams", UserExamsSchema);
+module.exports = mongoose.model("studentAnswers", studentAnswerSchema);

@@ -1,19 +1,19 @@
 const express = require('express')
-const UserExams = require('../models/userExams')
+const UserAnswer = require('../models/studentAnswers')
 const router = express.Router()
 
 router.get('/', (req, res) => {
-    UserExams.find().then(data => {
+    UserAnswer.find().then(data => {
         res.status(200).json(data)
     }).catch(e => {
         res.status(500).json({ message: e })
     })
 })
 
-//spesific exam
-router.get("/:id", async (req, res) => {
+//spesific student and chapter
+router.get("/student", async (req, res) => {
     try {
-        UserExams.find({ userId: req.params.id }).then(data => {
+        UserAnswer.findOne({ chapterNumber: req.query.chapterNumber, studentId: req.query.studentId }).then(data => {
             res.status(200).json(data)
         })
     } catch (err) {
@@ -21,9 +21,10 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-router.get("/exam/:id", async (req, res) => {
+// specific chapter for teacher
+router.get("/chapter/:number", async (req, res) => {
     try {
-        UserExams.find({ examId: req.params.id,  }).then(data => {
+        UserAnswer.find({ chapterNumber: req.params.number,}).then(data => {
             console.log("userexam", data)
             res.status(200).json(data)
         })
@@ -37,7 +38,7 @@ router.get("/exam/:id", async (req, res) => {
 router.get("/exam/:id", async (req, res) => {
     try {
         let resultList = [];
-        const userExams = UserExams.find({ examId: req.params.id });
+        const userExams = UserAnswer.find({ examId: req.params.id });
 
         userExams.forEach(element => {
             const user = Users.findOne(element.userId);
@@ -60,17 +61,18 @@ router.get("/exam/:id", async (req, res) => {
 */
 
 router.post('/', (req, res) => {
-    const userExams = new UserExams({
-        examId: req.body.examId,
-        examName: req.body.examName,
-        userId: req.body.userId,
-        fullname: req.body.fullname,
+    const userExams = new UserAnswer({
+        chapterId: req.body.chapterId,
+        chapterNumber: req.body.chapterNumber,
+        chapterType: req.body.chapterType,
+        studentId: req.body.studentId,
+        studentName: req.body.studentName,
         grade: req.body.grade,
-        review: req.body.review,
+        answers: req.body.answers,
         status: req.body.status || 'waiting',
     })
     userExams.save().then(data => {
-        res.status(200).json(data)
+        res.status(201).json(data)
     }).catch(e => {
         console.log(e)
         res.status(500).json({ message: e })
@@ -78,9 +80,9 @@ router.post('/', (req, res) => {
 })
 
 router.put("/:id", (req, res) => {
-    UserExams.updateOne({ _id: req.params.id }, {
+    UserAnswer.updateOne({ _id: req.params.id }, {
         $push: {
-            review: req.body.review,
+            answers: req.body.answers,
         }
     }).then(data => {
         res.status(200).json(data)
@@ -90,11 +92,15 @@ router.put("/:id", (req, res) => {
 })
 
 router.patch('/:id', (req, res) => {
-    UserExams.updateOne({ _id: req.params.id }, {
+    UserAnswer.updateOne({ _id: req.params.id }, {
         $set: {
-            examId: req.body.examId,
-            userId: req.body.userId,
+            chapterId: req.body.chapterId,
+            chapterNumber: req.body.chapterNumber,
+            chapterType: req.body.chapterType,
+            studentId: req.body.studentId,
+            studentName: req.body.studentName,
             grade: req.body.grade,
+            status: req.body.status,
         }
     }).then(data => {
         res.status(200).json(data)
@@ -104,7 +110,7 @@ router.patch('/:id', (req, res) => {
 })
 
 router.delete('/:id', (req, res) => {
-    UserExams.deleteOne({ _id: req.params.id })
+    UserAnswer.deleteOne({ _id: req.params.id })
         .then(data => {
             res.status(200).json(data)
         }).catch(e => {

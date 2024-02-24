@@ -1,10 +1,11 @@
 const express = require('express')
-const ExamQuestions = require('../models/questions')
+const Question = require('../models/questions')
+const { v4: uuidv4 } = require('uuid');
 const router = express.Router()
 
 //Get ExamQ(s)
 router.get('/', (req, res) => {
-    ExamQuestions.find().then(data => {
+    Question.find().then(data => {
         res.status(200).json(data)
     }).catch(e => {
         res.status(500).json({ message: e })
@@ -12,9 +13,9 @@ router.get('/', (req, res) => {
 })
 
 //GET ExamQ
-router.get("/:id", async (req, res) => {
+router.get("/:chapter", async (req, res) => {
     try {
-        ExamQuestions.find({ examId: req.params.id }).then(data => {
+        Question.find({ chapter: req.params.chapter }).then(data => {
             console.log(data)
             res.status(200).json(data)
         })
@@ -25,14 +26,23 @@ router.get("/:id", async (req, res) => {
 
 router.post('/', (req, res) => {
     if (req.body.type === 'open' || req.body.type === 'upload')  req.body.options = null
+
+    let optionsWithId = []
+    if (req.body.type === 'multiple' && req.body.options) {
+        optionsWithId = req.body.options.map(option => ({
+            id: uuidv4(),
+            text: option.text,
+            isCorrect: option.isCorrect || false
+        }));
+    }
  
-    const examQuestions = new ExamQuestions({
-        examId: req.body.examId,
+    const examQuestions = new Question({
+        chapter: req.body.chapter,
         title: req.body.title,
         type: req.body.type,
-        options: req.body.options,
-        correctAnswer: req.body.correctAnswer,
+        options: optionsWithId,
     })
+
     examQuestions.save().then(data => {
         res.status(201).json(data)
     }).catch(e => {
@@ -42,9 +52,19 @@ router.post('/', (req, res) => {
 })
 
 router.put("/option/:id", (req, res) => {
-    ExamQuestions.updateOne({ _id: req.params.id }, {
+
+    let optionsWithId = []
+    if (req.body.options) {
+        optionsWithId = req.body.options.map(option => ({
+            id: uuidv4(),
+            text: option.text,
+            isCorrect: option.isCorrect || false
+        }));
+    }
+
+    Question.updateOne({ _id: req.params.id }, {
         $push: {
-            options: req.body.options,
+            options: optionsWithId,
         }
     }).then(data => {
         res.status(200).json(data)
@@ -56,13 +76,22 @@ router.put("/option/:id", (req, res) => {
 
 router.patch('/:id', (req, res) => {
     if (req.body.type === 'open' || req.body.type === 'upload')  req.body.options = null
-    ExamQuestions.updateOne({ _id: req.params.id }, {
+    
+    let optionsWithId = []
+    if (req.body.options) {
+        optionsWithId = req.body.options.map(option => ({
+            id: uuidv4(),
+            text: option.text,
+            isCorrect: option.isCorrect || false
+        }));
+    }
+
+    Question.updateOne({ _id: req.params.id }, {
         $set: {
-            examId: req.body.examId,
+            chapter: req.body.chapter,
             title: req.body.title,
             type: req.body.type,
-            options: req.body.options,
-            correctAnswer: req.body.correctAnswer,
+            options: optionsWithId,
         }
     }).then(data => {
         res.status(200).json(data)
@@ -73,7 +102,7 @@ router.patch('/:id', (req, res) => {
 })
 
 router.delete('/:id', (req, res) => {
-    ExamQuestions.deleteOne({ _id: req.params.id })
+    Question.deleteOne({ _id: req.params.id })
         .then(data => {
             res.status(200).json(data)
         }).catch(e => {

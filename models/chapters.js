@@ -7,7 +7,7 @@ const ChapterSchema = new mongoose.Schema({
     unique: true
   },
   desc: {
-    type: Text,
+    type: String,
   },
   passGrade: {
     type: Number,
@@ -20,8 +20,8 @@ const ChapterSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum : ['multiple', 'open', 'upload'],
-    default: 'multiple'
+    enum : ['pilihan ganda', 'essai', 'upload file'],
+    default: 'pilihan ganda',
   }
 },
   {

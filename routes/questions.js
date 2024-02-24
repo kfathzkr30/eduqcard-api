@@ -16,7 +16,6 @@ router.get('/', (req, res) => {
 router.get("/:chapter", async (req, res) => {
     try {
         Question.find({ chapter: req.params.chapter }).then(data => {
-            console.log(data)
             res.status(200).json(data)
         })
     } catch (err) {

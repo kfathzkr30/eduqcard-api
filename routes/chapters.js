@@ -18,22 +18,29 @@ router.get("/student/:id", async (req, res) => {
     try {
         const chapters = await Chapter.find()
         const studentAnswers = await StudentAnswer.find({ studentId: req.params.id })
+        
+        const chaptersWithStatus = chapters.map(chapter => {
+            let status = "locked";
 
-        for (let i = 0; i < chapters.length; i++) {
-            const chapter = chapters[i];
-
-            for (let j = 0; j < studentAnswers.length; j++) {
-                const studentAns = studentAnswers[j];
-                
-                if (chapter.number === studentAns.chapterNumber) {
-                    chapter.status = "unlocked"
-                } else {
-                    chapter.status = "locked"
+            if (chapter.number === 1 && !studentAnswers.length) {
+                status = "unlocked";
+            } else if (studentAnswers.length){
+                for (let j = 0; j < studentAnswers.length; j++) {
+                    const studentAns = studentAnswers[j];
+                    if (chapter.number === studentAns.chapterNumber) {
+                        status = "finished";
+                        break
+                    }
                 }
             }
-        }
 
-        return res.status(200).json(chapters)
+            return {
+                ...chapter.toObject(), // Gunakan toObject() untuk mengonversi dokumen Mongoose menjadi objek JavaScript biasa
+                status: status
+            };
+        });
+
+        return res.status(200).json(chaptersWithStatus)
     } catch (err) {
         console.log(err)
         res.status(500).json({ message: err });
@@ -41,7 +48,7 @@ router.get("/student/:id", async (req, res) => {
 });
 
 //GET Chapter by chapter Number
-router.get("/chapter/:number", async (req, res) => {
+router.get("/:number", async (req, res) => {
     try {
         Chapter.findOne({ number: req.params.number }).then(data => {
             res.status(200).json(data)
@@ -52,13 +59,18 @@ router.get("/chapter/:number", async (req, res) => {
     }
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     const body = req.body
 
+    const existChapter = await Chapter.find({ number: body.number })
+    if (existChapter.length) {
+        return res.status(400).json({ message: 'Chapter number already exists'})
+    }
+
     const chapter = new Chapter({
-        number: body.number,
+        number: +body.number,
         desc: body.desc,
-        passGrade: body.passGrade,
+        passGrade: +body.passGrade,
         time: body.time,
         type: body.type,
     })
@@ -71,6 +83,7 @@ router.post('/', (req, res) => {
 })
 
 router.patch('/:number', (req, res) => {
+    const body = req.body
     Chapter.updateOne({ number: req.params.number }, {
         $set: {
             number: body.number,

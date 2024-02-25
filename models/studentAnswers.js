@@ -39,7 +39,10 @@ const studentAnswerSchema = new mongoose.Schema({
         },
         correctAnswer: {
             type: String,
-        }
+        },
+        correctKeyword: [{
+            type: String,
+        }]
     }]
 },
     {

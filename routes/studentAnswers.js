@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
 //spesific student and chapter
 router.get("/student", async (req, res) => {
     try {
-        UserAnswer.findOne({ chapterNumber: req.query.chapterNumber, studentId: req.query.studentId }).then(data => {
+        UserAnswer.find({ chapterNumber: req.query.chapterNumber, studentId: req.query.studentId }).sort({createdAt: 1}).then(data => {
             res.status(200).json(data)
         })
     } catch (err) {

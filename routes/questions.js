@@ -1,6 +1,7 @@
 const express = require('express')
 const Question = require('../models/questions')
 const { v4: uuidv4 } = require('uuid');
+const StudentAnswers = require('../models/studentAnswers');
 const router = express.Router()
 
 //Get ExamQ(s)
@@ -13,6 +14,32 @@ router.get('/', (req, res) => {
 })
 
 //GET ExamQ
+router.get("/student/:chapter", async (req, res) => {
+    try {
+        const isFinished = await StudentAnswers.count({ 
+            chapterNumber: req.params.chapter,
+            studentId: req.query.studentId,
+            status: 'pass'
+        })
+        if (isFinished > 0) {
+            return res.status(400).json({ message: 'Kamu sudah menyelesaikan chapter ini'})
+        } else if (req.params.chapter != 1) {
+            const unlocked = await StudentAnswers.count({ 
+                chapterNumber: +req.params.chapter - 1,
+                studentId: req.query.studentId,
+                status: 'pass'
+            })
+            if (!unlocked) return res.status(400).json({ message: 'Kamu belum membuka chapter ini'})
+        }
+
+        Question.find({ chapter: req.params.chapter }).then(data => {
+            res.status(200).json(data)
+        })
+    } catch (err) {
+        res.status(500).json({ message: err });
+    }
+});
+
 router.get("/:chapter", async (req, res) => {
     try {
         Question.find({ chapter: req.params.chapter }).then(data => {

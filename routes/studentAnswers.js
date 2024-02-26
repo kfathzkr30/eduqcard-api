@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
 //spesific student and chapter
 router.get("/student", async (req, res) => {
     try {
-        UserAnswer.find({ chapterNumber: req.query.chapterNumber, studentId: req.query.studentId }).sort({createdAt: 1}).then(data => {
+        UserAnswer.find({ chapterNumber: req.query.chapterNumber, studentId: req.query.studentId }).sort({createdAt: -1}).then(data => {
             res.status(200).json(data)
         })
     } catch (err) {
@@ -63,7 +63,7 @@ router.get("/exam/:id", async (req, res) => {
 router.post('/', (req, res) => {
     const userExams = new UserAnswer({
         chapterId: req.body.chapterId,
-        chapterNumber: req.body.chapterNumber,
+        chapterNumber: +req.body.chapterNumber,
         chapterType: req.body.chapterType,
         studentId: req.body.studentId,
         studentName: req.body.studentName,

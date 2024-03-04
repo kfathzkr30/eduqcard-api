@@ -7,6 +7,7 @@ const studentRoute = require('./routes/students')
 const questionRoute = require('./routes/questions')
 const studentAnswerRoute = require('./routes/studentAnswers')
 const chapterRoute = require('./routes/chapters')
+const teacherRoute = require('./routes/teachers')
 require('dotenv').config()
 
 app.use(cors())
@@ -19,6 +20,7 @@ mongoose.connect(process.env.DATABASE_ACCESS).then(data => {
 })
 
 app.use('/student', studentRoute)
+app.use('/teacher', teacherRoute)
 app.use('/question', questionRoute)
 app.use('/chapter', chapterRoute)
 app.use('/answer', studentAnswerRoute)

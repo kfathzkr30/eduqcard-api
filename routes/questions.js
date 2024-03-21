@@ -63,6 +63,7 @@ router.post('/', (req, res) => {
     }
  
     const examQuestions = new Question({
+        imageUrl: req.body?.imageUrl,
         chapter: req.body.chapter,
         title: req.body.title,
         type: req.body.type,

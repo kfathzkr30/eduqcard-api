@@ -37,9 +37,9 @@ const studentAnswerSchema = new mongoose.Schema({
         userAnswer: {
             type: String,
         },
-        correctAnswer: {
+        correctAnswer: [{
             type: String,
-        },
+        }],
         correctKeyword: [{
             type: String,
         }]

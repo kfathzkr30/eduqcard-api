@@ -35,7 +35,9 @@ router.get("/student/:id", async (req, res) => {
                         chapter.grade = studentAns.grade > chapter.grade ? studentAns.grade : chapter.grade
                         if (studentAns.status === 'pass') {
                             chapter.status = "finished";
-                            chapters[i + 1].status = "unlocked"
+                            if (i < 2) {
+                                chapters[i + 1].status = "unlocked"
+                            }
                             break
                         }
                         chapter.status = "unlocked"

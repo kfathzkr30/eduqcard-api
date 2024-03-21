@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+    <div class="element1"></div>
+    <div class="element2"></div>
+  </div>
+    <style>
+        .container {
+          position: relative;
+        }
+      
+        .element1,
+        .element2 {
+          width: 20px;
+          height: 20px;
+          background-color: blue; /* Change color as needed */
+          position: absolute;
+          z-index: 1;
+        }
+      
+        .element1 {
+          top: 50px; /* Adjust position as needed */
+          left: 50px; /* Adjust position as needed */
+        }
+      
+        .element2 {
+          top: 150px; /* Adjust position as needed */
+          left: 150px; /* Adjust position as needed */
+        }
+      
+        /* Connecting Line */
+        .container::after {
+          content: '';
+          position: absolute;
+          border: 2px solid black; /* Change color and thickness as needed */
+          /* Calculate the length, angle, and position of the line */
+          width: calc(sqrt(2) * 100px); /* Adjust length as needed */
+          height: 2px; /* Adjust thickness as needed */
+          top: 50px; /* Adjust position as needed */
+          left: 50px; /* Adjust position as needed */
+          transform: rotate(45deg); /* Adjust angle as needed */
+          transform-origin: top left; /* Keep the starting point at the top left corner */
+        }
+      </style>
+      
+</body>
+</html>

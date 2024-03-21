@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const app = express()
 const cors = require('cors')
+const path = require("path");
 const bodyParser = require('body-parser')
 const studentRoute = require('./routes/students')
 const questionRoute = require('./routes/questions')
@@ -18,6 +19,8 @@ mongoose.connect(process.env.DATABASE_ACCESS).then(data => {
 }).catch(error => {
     console.log(error)
 })
+
+app.use(express.static(path.join(__dirname, "./public")));
 
 app.use('/student', studentRoute)
 app.use('/teacher', teacherRoute)

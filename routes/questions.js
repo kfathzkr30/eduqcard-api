@@ -51,7 +51,7 @@ router.get("/:chapter", async (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    if (req.body.type === 'open' || req.body.type === 'upload')  req.body.options = null
+    if (req.body.type === 'open' || req.body.type === 'upload' || req.body.type === 'flip')  req.body.options = null
 
     let optionsWithId = []
     if (req.body.type === 'multiple' && req.body.options) {

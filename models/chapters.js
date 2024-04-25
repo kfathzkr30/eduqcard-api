@@ -20,7 +20,7 @@ const ChapterSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum : ['pilihan ganda', 'essai', 'upload file'],
+    enum : ['pilihan ganda', 'essai', 'upload file', 'flip'],
     default: 'pilihan ganda',
   }
 },

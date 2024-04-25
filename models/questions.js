@@ -16,7 +16,7 @@ const QuestionSchema = new mongoose.Schema({
     type: {
         type: String,
         required: true,
-        enum : ['multiple', 'open', 'upload'],
+        enum : ['multiple', 'open', 'upload', 'flip'],
         default: 'multiple'
     },
     options: [{

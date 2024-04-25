@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 //GET Chapter
 router.get("/student/:id", async (req, res) => {
     try {
-        const oldChapters = await Chapter.find()
+        const oldChapters = await Chapter.find().sort({ number: 1 })
         const studentAnswers = await StudentAnswer.find({ studentId: req.params.id })
         
         const chapters = oldChapters.map(chapter => {

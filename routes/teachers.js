@@ -1,27 +1,26 @@
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 
-router.post("/login", async (req, res) => {
-    try {
-        const { email, password } = req.body;
+router.post('/login', async (req, res) => {
+	try {
+		const { email, password } = req.body;
 
-        if (email != "teacher@educiviq.com") {
-            return res.status(400).json({ message: "Email salah"});
-        }
+		if (email != 'teacher@edciviq.com') {
+			return res.status(400).json({ message: 'Email salah' });
+		}
 
-        if (password != "iamteacher") {
-            return res.status(400).json({ message: "Password salah"});
-        }
+		if (password != 'iamteacher') {
+			return res.status(400).json({ message: 'Password salah' });
+		}
 
-        return res.status(200).json({
-            id: 1,
-            email: email,
-        });
-    } catch (err) {
-        console.log(err)
-        return res.json({ message: "Gagal menambah pengguna." })
-    }
-})
-
+		return res.status(200).json({
+			id: 1,
+			email: email,
+		});
+	} catch (err) {
+		console.log(err);
+		return res.json({ message: 'Gagal menambah pengguna.' });
+	}
+});
 
 module.exports = router;
